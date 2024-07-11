@@ -43,8 +43,9 @@ const LoginForm = () => {
       // Here we can handle the successful login response (e.g., save the token, redirect to another page)
       console.log("Login successful Data:", response.data);
 
-      // Storing token in cookies
-      Cookies.set("access_token", response.data.access_token, { expires: 7 });
+      // Storing token and user role in cookies
+      Cookies.set("access_token", response.data.token.access_token, { expires: 7 });
+      Cookies.set("user", response.data.user.role, { expires: 7 });
 
       toast({
         title: "Success",

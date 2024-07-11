@@ -64,6 +64,7 @@ export default function Nav() {
 
   const handleLogout = () => {
     Cookies.remove("access_token");
+    Cookies.remove("user");
     setIsLoggedIn(false);
     route.refresh();
     route.push("/sign-in");
