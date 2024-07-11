@@ -1,8 +1,1 @@
-#Todo
-user pic 
-book pic
-Gender
-Forgot Password
-Email Verification
-Message Verification
-Git Repository
+# LMS Version 0.0.1

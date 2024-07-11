@@ -1,5 +1,5 @@
 "use client";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 import { useEffect, useState } from "react";
 import {
@@ -36,7 +36,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { CircleX, Loader2 } from "lucide-react";
 import { request } from "http";
 
 const callsToAction = [
@@ -52,9 +52,9 @@ export default function Nav() {
   const route = useRouter();
 
   useEffect(() => {
-    const token = Cookies.get('access_token');
+    const token = Cookies.get("access_token");
     setIsLoggedIn(!!token);
-  }, []); 
+  }, []);
 
   const handleLogout = () => {
     Cookies.remove("access_token");
@@ -62,7 +62,6 @@ export default function Nav() {
     route.refresh();
     route.push("/sign-in");
   };
-
 
   const onSubmit = async (data: z.infer<typeof searchSchema>) => {
     console.log("Form submitted:", data);
@@ -75,7 +74,6 @@ export default function Nav() {
       }
 
       const response = await axios.get(
-        // `https://1a7c-193-56-116-12.ngrok-free.app/books/search-books?query=${data.search}`,
         `http://192.168.0.247:8000/book?search=${data.search}`,
         {
           headers: {
@@ -292,7 +290,7 @@ export default function Nav() {
       </Dialog>
 
       {/* Search Results Section */}
-      <div className="container mx-auto p-6">
+      <div className=" flex justify-between container mx-auto p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {searchResults ? (
             searchResults.map((book: searchResponse) => (
@@ -300,21 +298,26 @@ export default function Nav() {
                 key={book.id}
                 className="bg-slate-100 overflow-hidden shadow-md rounded-lg transition duration-300 transform hover:scale-105 hover:shadow-xl"
               >
-                <div className="px-4 py-3">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    {book.name}
-                  </h3>
-                  <p className="text-sm text-gray-600">Author: {book.author}</p>
-                  <p className="text-sm text-gray-700">Genre: {book.genre}</p>
-                </div>
-                <div className="px-4 py-2">
-                  <p>
-                    {book.available ? (
-                      <span className="text-green-500">Available</span>
-                    ) : (
-                      <span className="text-red-500">Not Available</span>
-                    )}
-                  </p>
+                <div className=" flex justify-between px-4 py-3">
+                  <div className="px-4 py-3">
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {book.name}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Author: {book.author}
+                    </p>
+                    <p className="text-sm text-gray-700">Genre: {book.genre}</p>
+                    <p className="text-sm text-gray-700">Stock: {book.stock}</p>
+                  </div>
+                  <div>
+                    <Image
+                      src={book?.image_url}
+                      alt={book.name}
+                      width={150}
+                      height={150}
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
               </div>
             ))
@@ -324,6 +327,13 @@ export default function Nav() {
             </p>
           )}
         </div>
+        {searchResults.length > 0 ? (
+          <div>
+            <CircleX onClick={() => setSearchResults([])} />
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </header>
   );
