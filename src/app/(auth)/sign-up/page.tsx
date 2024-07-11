@@ -25,6 +25,7 @@ const SignupForm = () => {
     defaultValues: {
       username: "",
       email: "",
+      image: "",
       password: "",
       is_active: true,
       role: "student",
@@ -49,7 +50,7 @@ const SignupForm = () => {
       );
       toast({
         title: "Success",
-        description: response.data,
+        description: "Registered successfully",
       });
       console.log("Registered successfully:", response.data);
 
@@ -137,6 +138,33 @@ const SignupForm = () => {
             {/* In any error case of current field error message will shown because we get errors from formState */}
             <p className=" text-sm text-red-500 my-1">
               {errors.email?.message}
+            </p>
+          </div>
+          {/* user image url */}
+          <div className="flex justify-start  text-start flex-col my-2">
+            <Label className="my-1" htmlFor="image">
+              Image URL
+            </Label>
+            <Input
+              type="text"
+              id="image"
+              placeholder="https://example.com/image.png"
+              className="border border-black rounded p-2"
+              {...register("image", {
+                // we can do custom validation using the validate function
+                validate: {
+                  notAllowed: (fieldValue) => {
+                    return (
+                      fieldValue.startsWith("http") ||
+                      "Please enter a valid image url with https or http"
+                    );
+                  },
+                },
+              })}
+            />
+            {/* In any error case of current field error message will shown because we get errors from formState */}
+            <p className=" text-sm text-red-500 my-1">
+              {errors.image?.message}
             </p>
           </div>
 

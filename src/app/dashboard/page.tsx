@@ -17,6 +17,7 @@ import axios from "axios";
 import { toast } from "@/components/ui/use-toast";
 import { bookTypes } from "@/types/bookDetails";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Dashboard = () => {
   const [bookDetails, setBookDetails] = useState({
@@ -24,6 +25,7 @@ const Dashboard = () => {
     name: "",
     genre: "",
     author: "",
+    image_url: "",
   });
   const [books, setBooks] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
@@ -59,7 +61,7 @@ const Dashboard = () => {
     setDialogOpen(true);
   };
 
-  const handleDelete = async (bookId: number) => {
+  const handleDelete = async (bookId: string) => {
     const accessToken = localStorage.getItem("access_token");
     try {
       await axios.delete(`http://192.168.0.247:8000/book/${bookId}`, {
@@ -137,7 +139,13 @@ const Dashboard = () => {
               variant="default"
               onClick={() => {
                 setIsEdit(false);
-                setBookDetails({ id: null, name: "", genre: "", author: "" });
+                setBookDetails({
+                  id: null,
+                  name: "",
+                  genre: "",
+                  author: "",
+                  image_url: "",
+                });
                 setDialogOpen(true);
               }}
             >
@@ -183,6 +191,17 @@ const Dashboard = () => {
                   className="col-span-3"
                 />
               </div>
+              <div className="flex flex-col justify-start text-start gap-4">
+                <Label htmlFor="image_url" className="">
+                  Image URL
+                </Label>
+                <Input
+                  id="image_url"
+                  value={bookDetails.image_url}
+                  onChange={handleChange}
+                  className="col-span-3"
+                />
+              </div>
             </div>
             <DialogFooter>
               <Button type="button" onClick={handleSaveBook}>
@@ -204,14 +223,24 @@ const Dashboard = () => {
                   key={book.id}
                   className="bg-slate-100 overflow-hidden shadow-md rounded-lg transition duration-300 transform hover:scale-105 hover:shadow-xl"
                 >
-                  <div className="px-4 py-3">
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {book.name}
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      Author: {book.author}
-                    </p>
-                    <p className="text-sm text-gray-700">Genre: {book.genre}</p>
+                  <div className=" flex justify-between items-center px-4 py-3">
+                    <div className="px-4 py-3">
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        {book.name}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        Author: {book.author}
+                      </p>
+                      <p className="text-sm text-gray-700">
+                        Genre: {book.genre}
+                      </p>
+                      <p className="text-sm text-gray-700">
+                        Stock: {book.stock}
+                      </p>
+                    </div>
+                    <div>
+                      <Image src={book?.image_url} alt={book.name} width={150} height={150} className="object-cover" />
+                    </div>
                   </div>
                   <div className="px-4 py-2 flex justify-between items-center">
                     <p>

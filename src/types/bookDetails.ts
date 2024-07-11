@@ -1,7 +1,8 @@
 export type bookTypes = {
-    id: number;
-    name: string;
-    genre: string;
-    author: string;
-    available: boolean;
-  };
+  uuid: string;
+  name: string;
+  genre: string;
+  author: string;
+  available: boolean;
+  image_url: string;
+};
