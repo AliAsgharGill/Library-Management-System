@@ -14,12 +14,11 @@ const nextConfig = {
       "gufhtugu.com",
       "upload.wikimedia.org",
       "cdn.thinglink.me",
+      "jamesclear.com",
+      "static-01.daraz.pk",
     ],
   },
-  async middleware() {
-    const { middleware } = await import("./middleware.ts");
-    return middleware;
-  },
+  
 };
 
 export default nextConfig;

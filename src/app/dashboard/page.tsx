@@ -27,7 +27,7 @@ const Dashboard = () => {
     author: "",
     image_url: "",
   });
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState<bookTypes[]>([]);
   const [isEdit, setIsEdit] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -216,7 +216,7 @@ const Dashboard = () => {
         <h1 className="text-3xl font-bold mb-6">Available Books</h1>
 
         <div className="container mx-auto p-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {books.length > 0 ? (
               books.map((book: any) => (
                 <div
@@ -237,26 +237,32 @@ const Dashboard = () => {
                       <p className="text-sm text-gray-700">
                         Stock: {book.stock}
                       </p>
+                      <div className="px-4 py-2 flex justify-between items-center">
+                        <p>
+                          {book.available ? (
+                            <div className="text-green-500 ">Available</div>
+                          ) : (
+                            <div className="text-red-500">Not Available</div>
+                          )}
+                        </p>
+                        <div className="flex space-x-5">
+                          <button onClick={() => handleEdit(book)}>
+                            <Edit3 className="text-blue-500 w-5 h-5" />
+                          </button>
+                          <button onClick={() => handleDelete(book.id)}>
+                            <Trash2 className="text-red-500 w-5 h-5" />
+                          </button>
+                        </div>
+                      </div>
                     </div>
                     <div>
-                      <Image src={book?.image_url} alt={book.name} width={150} height={150} className="object-cover" />
-                    </div>
-                  </div>
-                  <div className="px-4 py-2 flex justify-between items-center">
-                    <p>
-                      {book.available ? (
-                        <span className="text-green-500">Available</span>
-                      ) : (
-                        <span className="text-red-500">Not Available</span>
-                      )}
-                    </p>
-                    <div className="flex space-x-5">
-                      <button onClick={() => handleEdit(book)}>
-                        <Edit3 className="text-blue-500 w-5 h-5" />
-                      </button>
-                      <button onClick={() => handleDelete(book.id)}>
-                        <Trash2 className="text-red-500 w-5 h-5" />
-                      </button>
+                      <Image
+                        src={book?.image_url}
+                        alt={book.name}
+                        width={150}
+                        height={150}
+                        className="object-cover"
+                      />
                     </div>
                   </div>
                 </div>
