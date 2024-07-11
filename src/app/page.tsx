@@ -3,8 +3,8 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="mt-20 z-0 " >
-      {/* <HomeHeroSection /> */}
+    <div className="z-0 " >
+      <HomeHeroSection />
     </div>
   );
 }

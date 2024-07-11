@@ -1,6 +1,5 @@
 "use client";
 import Cookies from "js-cookie";
-
 import { useEffect, useState } from "react";
 import {
   Dialog,
@@ -56,6 +55,13 @@ export default function Nav() {
     setIsLoggedIn(!!token);
   }, []);
 
+  const handleLogin = () => {
+    // Assuming your login process here
+    Cookies.set("access_token", "your_token");
+    setIsLoggedIn(true);
+    route.push("/dashboard"); // or any other page you want to redirect after login
+  };
+
   const handleLogout = () => {
     Cookies.remove("access_token");
     setIsLoggedIn(false);
@@ -109,7 +115,7 @@ export default function Nav() {
     <header className="z-50">
       <nav
         aria-label="Global"
-        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        className="mx-auto z-50 flex max-w-7xl items-center justify-between p-6 lg:px-8"
       >
         <div className="flex lg:flex-1">
           <Link href="/" className="-m-1.5 p-1.5">

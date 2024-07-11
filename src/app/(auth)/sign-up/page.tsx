@@ -25,10 +25,10 @@ const SignupForm = () => {
     defaultValues: {
       username: "",
       email: "",
-      image: "",
+      image_url: "",
       password: "",
-      is_active: true,
-      role: "student",
+      // is_active: true,
+      // role: "student",
     },
     // validation schema for form fields using zod library
     resolver: zodResolver(SignupSchema),
@@ -150,7 +150,7 @@ const SignupForm = () => {
               id="image"
               placeholder="https://example.com/image.png"
               className="border border-black rounded p-2"
-              {...register("image", {
+              {...register("image_url", {
                 // we can do custom validation using the validate function
                 validate: {
                   notAllowed: (fieldValue) => {
@@ -164,7 +164,7 @@ const SignupForm = () => {
             />
             {/* In any error case of current field error message will shown because we get errors from formState */}
             <p className=" text-sm text-red-500 my-1">
-              {errors.image?.message}
+              {errors.image_url?.message}
             </p>
           </div>
 
@@ -190,7 +190,7 @@ const SignupForm = () => {
           <Button
             type="submit"
             // remove !isValid condition and make it disabled for now only
-            disabled={!isDirty || !isDirty}
+            disabled={!isDirty || !isValid}
             className={`border my-2 ${
               isValid ? "bg-black" : "bg-gray-300"
             } font-bold text-white w-full my-2 p-2 rounded`}

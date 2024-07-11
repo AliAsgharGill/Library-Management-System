@@ -37,7 +37,6 @@ const LoginForm = () => {
     console.log("Form submitted:", data);
     try {
       const response = await axios.post(
-        // "https://4cc4-110-39-21-146.ngrok-free.app/register/login",
         "http://192.168.0.247:8000/user/login",
         data
       );
@@ -52,21 +51,19 @@ const LoginForm = () => {
         description: "Login successfully",
       });
 
-      route.push("/");
 
       // Redirect based on role
-      // if (response.data.role === "admin") {
-      //   route.push("/dashboard");
-      // } else {
-      //   route.push("/");
-      // }
+      if (response.data.user.role === "admin") {
+        route.push("/dashboard");
+      } else {
+        route.push("/");
+      }
 
       toast({
         title: "Success",
         description: "Logged in successfully",
       });
 
-      route.push("/dashboard");
       setIsSubmitting(false);
     } catch (error) {
       toast({

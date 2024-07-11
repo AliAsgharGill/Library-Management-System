@@ -16,6 +16,7 @@ const nextConfig = {
       "cdn.thinglink.me",
       "jamesclear.com",
       "static-01.daraz.pk",
+      "avatars.githubusercontent.com",
     ],
   },
   

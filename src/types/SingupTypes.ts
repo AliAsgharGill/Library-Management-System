@@ -4,7 +4,7 @@ export type SignupFormValues = {
   password: string;
   is_active: boolean;
   role: string;
-  image: string;
+  image_url : string;
 };
 
 export interface SignupApiResponse {

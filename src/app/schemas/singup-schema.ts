@@ -9,7 +9,7 @@ const SignupSchema = z.object({
       message: "Username can only contain letters, numbers, and underscores.",
     }),
   email: z.string().email({ message: "Please enter a valid email address." }),
-  image: z.string().url({ message: "Please enter a valid image url." }),
+  image_url: z.string().url({ message: "Please enter a valid image url." }),
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long." })
