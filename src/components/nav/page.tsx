@@ -26,17 +26,8 @@ import axios from "axios";
 import { toast } from "../ui/use-toast";
 import { z } from "zod";
 import { searchResponse, SearchValues } from "@/types/searchType";
-import { searchSchema } from "@/app/schemas/serach-schema";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { CircleX, Loader2 } from "lucide-react";
-import { request } from "http";
+import { searchSchema } from "@/app/schemas/search-schema";
 
 const callsToAction = [
   { name: "Watch demo", href: "#", icon: PlayCircleIcon },
@@ -49,6 +40,8 @@ export default function Nav() {
   const [searchResults, setSearchResults] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const route = useRouter();
+
+  const user = Cookies.get("user");
 
   useEffect(() => {
     const token = Cookies.get("access_token");
@@ -154,6 +147,14 @@ export default function Nav() {
           >
             Books
           </Link>
+          {user === "admin" ? (
+              <Link
+                href="/dashboard"
+                className="text-sm font-semibold leading-6 text-gray-900"
+              >
+                Dashboard
+              </Link>
+          ) : ""}
           <form
             noValidate
             onSubmit={handleSubmit(onSubmit)}
