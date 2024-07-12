@@ -77,7 +77,7 @@ const Dashboard = () => {
   };
 
   // Adding or updating book
-  const handleSaveBook = async () => {
+  const handleSaveBook = async () => {  
     console.log("Book Details:", bookDetails);
 
     // Sending book details to backend
@@ -218,13 +218,14 @@ const Dashboard = () => {
         <div className="container mx-auto p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {books.length > 0 ? (
-              books.map((book: any) => (
+              books.map((book: bookTypes) => (
                 <div
-                  key={book.id}
+                  key={book.uuid}
                   className="bg-slate-100 overflow-hidden shadow-md rounded-lg transition duration-300 transform hover:scale-105 hover:shadow-xl"
                 >
                   <div className=" flex justify-between items-center px-4 py-3">
                     <div className="px-4 py-3">
+                    <div>
                       <h3 className="text-lg font-semibold text-gray-900">
                         {book.name}
                       </h3>
@@ -237,6 +238,7 @@ const Dashboard = () => {
                       <p className="text-sm text-gray-700">
                         Stock: {book.stock}
                       </p>
+                    </div>
                         <p>
                           {book.available ? (
                             <div className="text-green-500  ">Available</div>
@@ -248,7 +250,7 @@ const Dashboard = () => {
                           <button onClick={() => handleEdit(book)}>
                             <Edit3 className="text-blue-500 w-5 h-5" />
                           </button>
-                          <button onClick={() => handleDelete(book.id)}>
+                          <button onClick={() => handleDelete(book.uuid)}>
                             <Trash2 className="text-red-500 w-5 h-5" />
                           </button>
                         </div>
