@@ -26,6 +26,14 @@ import axios from "axios";
 import { toast } from "../ui/use-toast";
 import { z } from "zod";
 import { searchResponse, SearchValues } from "@/types/searchType";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { CircleX, Loader2 } from "lucide-react";
 import { searchSchema } from "@/app/schemas/search-schema";
 
@@ -37,21 +45,26 @@ const callsToAction = [
 export default function Nav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false); // New state for admin check
   const [searchResults, setSearchResults] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const route = useRouter();
 
-  const user = Cookies.get("user");
-
   useEffect(() => {
     const token = Cookies.get("access_token");
     setIsLoggedIn(!!token);
+
+    // Check if user is admin
+    const userRole = Cookies.get("user"); // Assuming user is stored in cookies
+    setIsAdmin(userRole === "admin");
   }, []);
 
   const handleLogin = () => {
     // Assuming your login process here
     Cookies.set("access_token", "your_token");
+    Cookies.set("user", "admin"); // Set user role as admin for testing
     setIsLoggedIn(true);
+    setIsAdmin(true); // Update state
     route.push("/dashboard"); // or any other page you want to redirect after login
   };
 
@@ -59,6 +72,7 @@ export default function Nav() {
     Cookies.remove("access_token");
     Cookies.remove("user");
     setIsLoggedIn(false);
+    setIsAdmin(false); // Update state
     route.refresh();
     route.push("/sign-in");
   };
@@ -84,13 +98,11 @@ export default function Nav() {
       console.log("Search response:", response);
       setSearchResults(response.data);
     } catch (error) {
-      const errorMessage =
-        // error.response?.data?.message || "Failed to get book";
-        toast({
-          title: "Error",
-          description: "Failed to get book",
-          variant: "destructive",
-        });
+      toast({
+        title: "Error",
+        description: "Failed to get book",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -147,14 +159,14 @@ export default function Nav() {
           >
             Books
           </Link>
-          {user === "admin" ? (
-              <Link
-                href="/dashboard"
-                className="text-sm font-semibold leading-6 text-gray-900"
-              >
-                Dashboard
-              </Link>
-          ) : ""}
+          {isAdmin && (
+            <Link
+              href="/dashboard"
+              className="text-sm font-semibold leading-6 text-gray-900"
+            >
+              Dashboard
+            </Link>
+          )}
           <form
             noValidate
             onSubmit={handleSubmit(onSubmit)}
@@ -210,95 +222,8 @@ export default function Nav() {
         )}
       </nav>
 
-      {/* Mobile View */}
-      <Dialog
-        open={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
-        className="lg:hidden"
-      >
-        <div className="fixed inset-0 z-10" />
-        <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="-m-1.5 p-1.5">
-              <span className="sr-only text-blue-500">LMS</span>
-              <Image
-                height={32}
-                width={100}
-                alt=""
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSA0rBIlDbRRXR5efoXBU57WPSTaqyyA7z_NA&s"
-                className="h-8 w-auto"
-              />
-            </Link>
-            <Button
-              type="button"
-              onClick={() => setMobileMenuOpen(false)}
-              className="-m-2.5 rounded-md p-2.5 text-gray-700"
-            >
-              <span className="sr-only">Close menu</span>
-              <XMarkIcon aria-hidden="true" className="h-6 w-6" />
-            </Button>
-          </div>
-          <div className="mt-6 flow-root">
-            <div className="-my-6 divide-y divide-gray-500/10">
-              <div className="space-y-2 py-6">
-                <Disclosure as="div" className="-mx-3">
-                  <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                    Product
-                    <ChevronDownIcon
-                      aria-hidden="true"
-                      className="h-5 w-5 flex-none group-data-[open]:rotate-180"
-                    />
-                  </DisclosureButton>
-                </Disclosure>
-                <Link
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Features
-                </Link>
-                <Link
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Marketplace
-                </Link>
-                <Link
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Company
-                </Link>
-              </div>
-
-              <div className="py-6 flex justify-start ">
-                <Link
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Log in
-                </Link>
-                <Link
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Log in
-                </Link>
-              </div>
-              <div className="py-6">
-                <Link
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Register
-                </Link>
-              </div>
-            </div>
-          </div>
-        </DialogPanel>
-      </Dialog>
-
       {/* Search Results Section */}
-      <div className=" flex justify-between container mx-auto p-6">
+      <div className="flex justify-between container mx-auto p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {searchResults ? (
             searchResults.map((book: searchResponse) => (
@@ -306,7 +231,7 @@ export default function Nav() {
                 key={book.id}
                 className="bg-slate-100 overflow-hidden shadow-md rounded-lg transition duration-300 transform hover:scale-105 hover:shadow-xl"
               >
-                <div className=" flex justify-between px-4 py-3">
+                <div className="flex justify-between px-4 py-3">
                   <div className="px-4 py-3">
                     <h3 className="text-lg font-semibold text-gray-900">
                       {book.name}
@@ -337,12 +262,96 @@ export default function Nav() {
         </div>
         {searchResults.length > 0 ? (
           <div>
-            <CircleX onClick={() => setSearchResults([])} />
+            <CircleX
+              size={32}
+              className="cursor-pointer text-red-500"
+              onClick={() => setSearchResults([])}
+            />
           </div>
-        ) : (
-          ""
-        )}
+        ) : null}
       </div>
+      <Dialog
+        as="div"
+        open={mobileMenuOpen}
+        onClose={setMobileMenuOpen}
+        className="lg:hidden"
+      >
+        <div className="fixed inset-0 z-50" />
+        <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="-m-1.5 p-1.5">
+              <span className="sr-only">LMS</span>
+              <Image
+                height={100}
+                width={200}
+                priority
+                alt="logo"
+                src="https://i.pinimg.com/736x/a7/91/0c/a7910cf32f182c9ea34022abb7839980.jpg"
+                className="h-8 w-auto"
+              />
+            </Link>
+            <Button
+              type="button"
+              onClick={() => setMobileMenuOpen(false)}
+              className="-m-2.5 rounded-md p-2.5 text-gray-700"
+            >
+              <span className="sr-only">Close menu</span>
+              <XMarkIcon aria-hidden="true" className="h-6 w-6" />
+            </Button>
+          </div>
+          <div className="mt-6 flow-root">
+            <div className="-my-6 divide-y divide-gray-500/10">
+              <div className="space-y-2 py-6">
+                <Link
+                  href="/"
+                  className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10"
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/books"
+                  className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10"
+                >
+                  Books
+                </Link>
+                {isAdmin && (
+                  <Link
+                    href="/dashboard"
+                    className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10"
+                  >
+                    Dashboard
+                  </Link>
+                )}
+              </div>
+              <div className="py-6">
+                {isLoggedIn ? (
+                  <Button
+                    onClick={handleLogout}
+                    className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-6 text-white hover:bg-gray-400/10"
+                  >
+                    Log out
+                  </Button>
+                ) : (
+                  <div className="py-6">
+                    <Link
+                      href="/sign-in"
+                      className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10"
+                    >
+                      Log in
+                    </Link>
+                    <Link
+                      href="/sign-up"
+                      className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10"
+                    >
+                      Register
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </DialogPanel>
+      </Dialog>
     </header>
   );
 }
